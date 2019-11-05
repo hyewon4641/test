@@ -3,8 +3,9 @@
 int main(void)
 {
 	printf("Chief name is [박혜원]\n");
-	printfMyName1();
-	printfMyName2();
-	printfMyName3();
+	printMyName1();
+	printMyName2();
+	printMyName3();
 
+    return 0;
 }
