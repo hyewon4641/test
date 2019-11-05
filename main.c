@@ -6,5 +6,5 @@ int main(void)
 	printfMyName1();
 	printfMyName2();
 	printfMyName3();
-	printfMyName4();
+
 }
