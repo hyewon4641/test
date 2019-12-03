@@ -1,20 +1,24 @@
-all:final.elf
+all: libMyPeri.a buttontest.elf ledtest.elf buzzertest.elf
 
-final.elf:1.o 2.o 3.o main.o 
-	gcc -o final.elf 1.o 2.o 3.o main.o
+buttontest.elf: buttontest.c button.h
+	arm-linux-gnueabi-gcc --static -o buttontest.elf buttontest.c -l MyPeri -L. -lpthread
 
-1.o:1.c myProject.h
-	gcc -c 1.c
+ledtest.elf: ledtest.c led.h
+	arm-linux-gnueabi-gcc --static -o ledtest.elf ledtest.c -l MyPeri -L.
 
-2.o:2.c myProject.h
-	gcc -c 2.c
-
-3.o:3.c myProject.h
-	gcc -c 3.c
-
-main.o:main.c myProject.h
-	gcc -c main.c
+buzzertest.elf:buzzertest.c libbuzzer.h
+	arm-linux-gnueabi-gcc --static -o buzzertest.elf buzzertest.c -l MyPeri -L.
+	
+libMyPeri.a: button.h button.c led.h led.c buzzer.c libbuzzer.h
+	arm-linux-gnueabi-gcc -c button.c -o button.o -lpthread
+	arm-linux-gnueabi-gcc -c led.c -o led.o 
+	arm-linux-gnueabi-gcc -c buzzer.c -o buzzer.o
+	arm-linux-gnueabi-ar rc libMyPeri.a led.o button.o buzzer.o
 
 clean:
-	rm final.elf 1.o 2.o 3.o main.o
+	rm -f *.elf *.o *.a
+	
+              
+              
 
+              
