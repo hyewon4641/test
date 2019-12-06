@@ -1,0 +1,29 @@
+textlcddrv.h
+#ifndef__TEXTLCD_DRV_H__
+#define __TEXTLCD_DRV_H__#define LINE_NUM2
+#define COLUMN_NUM16typedefstructTextLCD_tag
+{
+unsignedcharcmd;//
+unsignedcharcmdData;
+unsignedcharreserved[2];
+charTextData[LINE_NUM][LINE_BUFF_NUM];
+}stTextLCD,*pStTextLCD;
+#defineLINE_BUFF_NUM(COLUMN_NUM+4)//fordummy
+#defineMODE_CMD0
+#defineMODE_DATA1
+#defineCMD_DISPLAY_MODE0x10
+#defineBIT_DISPLAY_MODE_CURSOR_DISP0x01
+#defineBIT_DISPLAY_MODE_CURSOR_BLINK0x02
+#defineBIT_DISPLAY_MODE_DISP_ENABLE0x04
+#defineCMD_CURSOR_MOVE_MODE0x11
+#defineCURSOR_MOVE_MODE_ENABLE0x01
+#defineCURSOR_MOVE_MODE_RIGHT_DIR0x02
+#defineCMD_CURSOR_MOVE_POSITION0x12
+#defineCURSOR_MOVE_X_MASK0x3F
+#defineCURSOR_MOVE_Y_MASK0xC0
+#defineCMD_WRITE_STRING0x20
+#defineCMD_DATA_WRITE_BOTH_LINE0
+#defineCMD_DATA_WRITE_LINE_11
+#defineCMD_DATA_WRITE_LINE_22
+#defineCMD_TEST_GPIO_HIGH0x30
+#defineCMD_TEST_GPIO_LOW0x31
