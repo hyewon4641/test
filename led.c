@@ -13,7 +13,7 @@
 static unsigned int ledValue=0;
 
 static int fd=0;
-int ledOnOff(int ledNum,int ledOnOff)
+int ledOnOff(int ledNum,int ledOnOff) // led 사용 
 {
 	unsigned int i=1;
 	

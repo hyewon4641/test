@@ -50,7 +50,7 @@ int findBuzzerSysPath(void)
 	int ifNotFound = 1;
 	if (dir_info != NULL)
 	{
-		while (1)
+		while (1) // while loop start
 		{	
 			struct dirent  *dir_entry;
 			dir_entry = readdir (dir_info);
@@ -60,29 +60,39 @@ int findBuzzerSysPath(void)
 				ifNotFound = 0;
 				sprintf(gBuzzerBaseSysDir,"%s%s/",BUZZER_BASE_SYS_PATH,dir_entry->d_name);
 			}
-		}
+		} // end of while
 	}
 	printf("find %s\n",gBuzzerBaseSysDir);
 
 	return ifNotFound; 
 }
-void buzzerEnable(int bEnable)
+void buzzerEnable(int bEnable) //buzzer 사용 
 {
 	char path[200];
 	sprintf(path,"%s%s",gBuzzerBaseSysDir,BUZZER_ENABLE_NAME);
 	int fd=open(path,O_WRONLY);
+	if ( fd < 0 ) // 파일 open error
+	{
+		perror("driver open error.\n");
+		return 0;
+	}	
 	if ( bEnable)		write(fd, &"1", 1);
 	else 				write(fd, &"0", 1);
 	close(fd);
 }
-void setFrequency(int scale) 
+void setFrequency(int scale) // buzzer on
 {
 	char path[200];
 	sprintf(path,"%s%s",gBuzzerBaseSysDir,BUZZER_FREQUENCY_NAME);
 	int fd=open(path,O_WRONLY);
+	if ( fd < 0 ) // 파일 open error
+	{
+		perror("driver open error.\n");
+		return 0;
+	}	
 	//printf ("Write Buf: %d\r\n",musicScale[scale]);
 	dprintf(fd, "%d", musicScale[scale]);
-	close(fd);
+	close(fd); // buzzer off
 }
 void libBuzzerInit(void)
 {
