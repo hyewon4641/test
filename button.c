@@ -24,21 +24,26 @@ static msgID=0;
 int buttonLibInit(void)
 {
 	
-	msgID=msgget(MESSAGE_ID,IPC_CREAT|0666);
+	msgID=msgget(MESSAGE_ID,IPC_CREAT|0666); // message get
 	int err=pthread_create(&buttonTh_id,NULL,&buttonThFunc,NULL);
-	if(err==0)
+	if(err==0) // thred 오류 
 		printf("thread create success\n"); 
-}
+} // 에러 확인 
 
-int buttonLibExit(void)
+int buttonLibExit(void) //button 사용 종료 
 {
 	pthread_cancel(buttonTh_id);
 	close(fd);
 }
 
-void buttonThFunc(void* Arg)
+void buttonThFunc(void* Arg) // button thred 실행 함수 
 {
 	fd=open(BUTTON_DRIVER_NAME,O_RDONLY);
+	if ( fd < 0 ) // 파일 open error
+	{
+		perror("driver open error.\n");
+		return 0;
+	}	
 	printf("buttonThFunc sucess\n");
 	BUTTON_MSG_T msgTx;
 	msgTx.messageNum=1;

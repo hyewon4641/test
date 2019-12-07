@@ -46,39 +46,39 @@ int fndDisp(int num , int dotflag) //0-999999 숫자, 비트로 인코딩된 dot
 	temp = num %1000; stWriteData.DataNumeric[3] = temp /100;
 	temp = num %100; stWriteData.DataNumeric[4] = temp /10; 
 	stWriteData.DataNumeric[5] = num %10; 
-	// i에 여섯자리의 숫자를 입력하고 각 자리 수를 배열에 입
+	// i에 여섯자리의 숫자를 입력하고 각 자리 수를 배열에 입력 
 	
 	fd = open(FND_DRIVER_NAME,O_RDWR);
-	if ( fd < 0 )
+	if ( fd < 0 ) // 오류확인 
 	{
 	//	perror("driver open error.\n");
 		return 0;
 	}
 	write(fd, &stWriteData, sizeof(stFndWriteForm));
 	close(fd);
-	return 1;력
+	return 1;
 }
 
-int fndOff()
+int fndOff() // fnd 종료 
 {
 	int fd,i;
 	stFndWriteForm stWriteData;
 	
-	for (i = 0; i < MAX_FND_NUM ; i++ )력
+	for (i = 0; i < MAX_FND_NUM ; i++ )
 	{
 		stWriteData.DataDot[i] =  0;  
 		stWriteData.DataNumeric[i] = 0;
 		stWriteData.DataValid[i] = 0;
-	}
-	fd = open(FND_DRIVER_NAME,O_RDWR);
-	if ( fd < 0 )
+	} // off하기 위해 전부 0으로 설정 
+	fd = open(FND_DRIVER_NAME,O_RDWR); //파일 open
+	if ( fd < 0 ) // 파일 open error
 	{
 		perror("driver open error.\n");
 		return 0;
 	}	
 	
-	write(fd,&stWriteData,sizeof(stFndWriteForm));
-	close(fd);
+	write(fd,&stWriteData,sizeof(stFndWriteForm)); //fnd write
+	close(fd); // 종료 
 	return 1;
 }
 
