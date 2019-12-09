@@ -87,7 +87,7 @@ void clockThFunc(void* Arg)
 		msgclockTx.realdata = 999;
 		msgsnd(msgID,&msgclockTx,sizeof(int),0);
 		//sleep(0.1);
-		usleep(100*1000);//100ms
+		usleep(1000*1000);//100ms
 	}
 }
 	
