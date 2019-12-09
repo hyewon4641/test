@@ -156,3 +156,15 @@ int colorled_off(void)
 	pwmSetPercent(atoi("0"),2);
 	
 }
+
+int colorled_OnOff(void)
+{
+	pwmSetPercent(atoi("100"),0);
+	pwmSetPercent(atoi("0"),1);
+	pwmSetPercent(atoi("0"),2);
+	usleep(500*1000);
+	pwmSetPercent(atoi("0"),0);
+	pwmSetPercent(atoi("0"),1);
+	pwmSetPercent(atoi("0"),2);
+	usleep(500*1000);
+}

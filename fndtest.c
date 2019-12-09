@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include "fnd.h"
 #include "led.h"	
+#include "colorled.h"
 
 
 static pthread_t ledTh_id;
@@ -34,11 +35,17 @@ int main(void)
 	{
 		fndDisp(i,0);
 		
-		if(i==5)
+		if(i==10)
 		{
-			pthread_create(&ledTh_id,NULL,&ledThFunc,NULL);
-			
+			pthread_create(&colorled_id,NULL,&colorled_OnOff,NULL);			
 		}
+		
+		for(i=10;i>=0;i--)
+		{
+			fndDisp(i,0);
+		}
+		 pthread_exit()
+	 }
 			
 	sleep(1);
 	
