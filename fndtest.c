@@ -1,43 +1,52 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/ioctl.h>
+#include <ctype.h>
+#include <sys/ipc.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <unistd.h>
-#include <pthread.h>
 #include "fnd.h"
+#include "led.h"	
 
+
+static pthread_t ledTh_id;
+
+void ledThFunc(void* Arg)
+{
+	int j=0;
+	for(j=0;j<5;j++)
+	{
+	ledOnOff(6,1);
+	sleep(0.5);
+	ledOnOff(6,0);
+	sleep(0.5);
+	}
+}
 
 int main(void)
 {
-	printf("start\n");
-	if (mode == MODE_STATIC_DIS )
+	ledLibInit();
+	int i;
+	for(i=60;i>=0;i--)
 	{
-	fndDisp(number , 0);	
-	}
-	else if(mode == MODE_TIME_DIS )
-	{
-	struct tm *ptmcur;
-	time_t tTime;
-	if ( -1 == time(&tTime) )
-	return -1;
-	ptmcur = localtime(&tTime);
-	number = ptmcur->tm_hour * 10000;
-	number += ptmcur->tm_min *100;
-	number += ptmcur->tm_sec;
-	fndDisp(number , 0b1010);
-	}
-	else if (mode == MODE_COUNT_DIS)
-	{
-	counter = 0;
-	while(1)
-	{
-	if (!fndDisp(counter , 0))
-	break;
-	counter++;
+		fndDisp(i,0);
+		
+		if(i==5)
+		{
+			pthread_create(&ledTh_id,NULL,&ledThFunc,NULL);
+			
+		}
+			
 	sleep(1);
-	if (counter > number )
-	break;
-	}
+	
+}
+	ledLibExit();
+
 }
 	
+
 
 
