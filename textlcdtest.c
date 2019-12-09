@@ -8,18 +8,16 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-//#include "textlcddrv.h"
 #include "textlcd.h"
-
-
-
 
 #define TEXTLCD_DRIVER_NAME		"/dev/peritextlcd"
 
 int main(void)
 {
-	init();
-	lcdwrite("hello","hello",1);
+	lcdtextInit();
+	lcdwrite("hello");
+	sleep(100000);
+
 	lcdexit();
 }
 
