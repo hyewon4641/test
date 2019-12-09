@@ -1,14 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/ioctl.h>
+#include <ctype.h>
+#include <sys/ipc.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <time.h>
+#include <fcntl.h>
 #include <unistd.h>
-#include <pthread.h>
 #include "fnd.h"
 
 #ifndef __FND_DRV_H__
 #define __FND_DRV_H__
 #define MAX_FND_NUM 6
 #define FND_DATA_BUFF_LEN (MAX_FND_NUM + 2)
+#define MODE_STATIC_DIS		0
+#define MODE_TIME_DIS		1
+#define MODE_COUNT_DIS		2
 
 typedef struct FNDWriteDataForm_tag
 {
@@ -19,6 +28,7 @@ char DataValid[FND_DATA_BUFF_LEN]; //숫자 0 or 1
 #endif// __FND_DRV_H__
 
 #define FND_DRIVER_NAME "/dev/perifnd"
+
 int fndDisp(int num , int dotflag) //0-999999 숫자, 비트로 인코딩된 dot on/off
 {
 	int fd;
@@ -39,10 +49,34 @@ int fndDisp(int num , int dotflag) //0-999999 숫자, 비트로 인코딩된 dot
 	fd = open(FND_DRIVER_NAME,O_RDWR);
 	if ( fd < 0 )
 	{
-		perror("driver open error.\n");
+	//	perror("driver open error.\n");
 		return 0;
 	}
 	write(fd, &stWriteData, sizeof(stFndWriteForm));
 	close(fd);
 	return 1;
 }
+
+int fndOff()
+{
+	int fd,i;
+	stFndWriteForm stWriteData;
+	
+	for (i = 0; i < MAX_FND_NUM ; i++ )
+	{
+		stWriteData.DataDot[i] =  0;  
+		stWriteData.DataNumeric[i] = 0;
+		stWriteData.DataValid[i] = 0;
+	}
+	fd = open(FND_DRIVER_NAME,O_RDWR);
+	if ( fd < 0 )
+	{
+		perror("driver open error.\n");
+		return 0;
+	}	
+	
+	write(fd,&stWriteData,sizeof(stFndWriteForm));
+	close(fd);
+	return 1;
+}
+

@@ -1,2 +1,2 @@
 
-int fndDisp(int num, int dotflag);
+int fndDisp(int num , int dotflag);
