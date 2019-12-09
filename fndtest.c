@@ -11,48 +11,54 @@
 #include "fnd.h"
 #include "colorledtest.h"
 
+int i;
 
 static pthread_t colorled_id;
 
 void colorled_OnOff(void* Arg)
 {
-	pwmSetPercent(atoi("100"),0);
-	pwmSetPercent(atoi("0"),1);
-	pwmSetPercent(atoi("0"),2);
+	pwmLedInit();
+	while(1)
+	{
+	colorled_on();
 	usleep(500*1000);
 	
-	pwmSetPercent(atoi("0"),0);
-	pwmSetPercent(atoi("0"),1);
-	pwmSetPercent(atoi("0"),2);
+	colorled_off();
 	usleep(500*1000);
+	
+	if(i==0)
+	break;
+	
 }
+	pwmInactiveAll();
+	
+	pthread_exit();
+}
+
 
 int main(void)
 {
-	ledLibInit();
-	int i;
+	
 	for(i=60;i>=0;i--)
 	{
 		fndDisp(i,0);
 		
+		
 		if(i==10)
 		{
-			pthread_create(&colorled_id,NULL,&colorled_OnOff,NULL);			
+			int err=pthread_create(&colorled_id,NULL,&colorled_OnOff,NULL);	
+			if(err==0)
+			printf("ss\n");		
 		}
 		
-		for(i=10;i>=0;i--)
-		{
-			fndDisp(i,0);
-		}
-		 pthread_exit()
-	 }
+			sleep(1);
+		 } 
 			
-	sleep(1);
+
+	pthread_exit(&colorled_id);
 	
 }
-	ledLibExit();
 
-}
 	
 
 
