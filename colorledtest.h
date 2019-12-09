@@ -10,5 +10,4 @@ int pwmLedInit(void);
 int colorled_on(void);
 int colorled_off(void);
 int colorled_off(void);
-int colorled_OnOff(void)
 #endif

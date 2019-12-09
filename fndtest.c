@@ -9,22 +9,22 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include "fnd.h"
-#include "led.h"	
-#include "colorled.h"
+#include "colorledtest.h"
 
 
-static pthread_t ledTh_id;
+static pthread_t colorled_id;
 
-void ledThFunc(void* Arg)
+void colorled_OnOff(void* Arg)
 {
-	int j=0;
-	for(j=0;j<5;j++)
-	{
-	ledOnOff(6,1);
-	sleep(0.5);
-	ledOnOff(6,0);
-	sleep(0.5);
-	}
+	pwmSetPercent(atoi("100"),0);
+	pwmSetPercent(atoi("0"),1);
+	pwmSetPercent(atoi("0"),2);
+	usleep(500*1000);
+	
+	pwmSetPercent(atoi("0"),0);
+	pwmSetPercent(atoi("0"),1);
+	pwmSetPercent(atoi("0"),2);
+	usleep(500*1000);
 }
 
 int main(void)
