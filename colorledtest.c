@@ -1,8 +1,19 @@
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
 #include <string.h>
+#include <linux/input.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <sys/mman.h>
+#include <sys/msg.h>
+#include <ctype.h>
+#include <sys/ipc.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include "colorledtest.h"
+
 #define COLOR_LED_DEV_R_ "/sys/class/pwm/pwmchip0/"
 #define COLOR_LED_DEV_G_ "/sys/class/pwm/pwmchip1/"
 #define COLOR_LED_DEV_B_ "/sys/class/pwm/pwmchip2/"
@@ -33,7 +44,7 @@ int fd = 0;
 
 int pwmInactiveAll(void)
 {
-int fd = 0;
+	int fd = 0;
 	fd = open ( COLOR_LED_DEV_R_ PWM_UNEXPORT, O_WRONLY);
 	write(fd,&"0",1);
 	close(fd);
@@ -129,7 +140,7 @@ int pwmLedInit(void)
 }
 
 
-int ooo(void)
+int colorled_on(void)
 {
 	
 	pwmSetPercent(atoi("100"),0);
@@ -137,28 +148,11 @@ int ooo(void)
 	pwmSetPercent(atoi("0"),2);
 
 }
-int xxx(void)
+int colorled_off(void)
 {
 	
 	pwmSetPercent(atoi("0"),0);
 	pwmSetPercent(atoi("0"),1);
 	pwmSetPercent(atoi("0"),2);
 	
-}
-
-
-
-int main(void)	
-{  
-	pwmLedInit();
-	int i;
-	for(i=0;i<20;i++)
-	{
-	ooo();
-	usleep(1);
-	xxx();
-	usleep(1);
-}
-	pwmInactiveAll();
-	return 0;
 }

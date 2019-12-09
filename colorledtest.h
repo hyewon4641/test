@@ -7,5 +7,7 @@ int pwmSetPeriod(int Period, int pwmIndex);
 int pwmSetPercent(int percent, int ledColor);
 int pwmStartAll(void);
 int pwmLedInit(void);
-int main(int argc, char *argv[]);
+int colorled_on(void);
+int colorled_off(void);
+int colorled_off(void);
 #endif

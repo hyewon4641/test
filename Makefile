@@ -30,6 +30,15 @@ libMyPeri.a: touch.c touch.h button.h button.c led.h led.c buzzer.c libbuzzer.h 
 clean:
 	rm -f *.elf *.o *.a
 	
+	all: libMyPeri.a colorledtest.elf
+
+colorledtest.elf:colortest.c colorledtest.h
+	arm-linux-gnueabi-gcc --static -o colorledtest.elf colortest.c -l MyPeri -L.
+
+libMyPeri.a:colorledtest.c colorledtest.h
+	arm-linux-gnueabi-gcc -c colorledtest.c -o colorledtest.o
+	arm-linux-gnueabi-ar rc libMyPeri.a colorledtest.o
+
               
               
 
