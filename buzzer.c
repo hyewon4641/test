@@ -50,7 +50,8 @@ int findBuzzerSysPath(void)
 	int ifNotFound = 1;
 	if (dir_info != NULL)
 	{
-		while (1) // while loop start
+		while (1)
+		 // while loop start
 		{	
 			struct dirent  *dir_entry;
 			dir_entry = readdir (dir_info);
@@ -60,18 +61,21 @@ int findBuzzerSysPath(void)
 				ifNotFound = 0;
 				sprintf(gBuzzerBaseSysDir,"%s%s/",BUZZER_BASE_SYS_PATH,dir_entry->d_name);
 			}
-		} // end of while
+		} 
+		// end of while
 	}
 	printf("find %s\n",gBuzzerBaseSysDir);
 
 	return ifNotFound; 
 }
-void buzzerEnable(int bEnable) //buzzer 사용 
+void buzzerEnable(int bEnable) 
+//buzzer 사용 
 {
 	char path[200];
 	sprintf(path,"%s%s",gBuzzerBaseSysDir,BUZZER_ENABLE_NAME);
 	int fd=open(path,O_WRONLY);
-	if ( fd < 0 ) // 파일 open error
+	if ( fd < 0 )
+	 // 파일 open error
 	{
 		perror("driver open error.\n");
 		return 0;
@@ -80,12 +84,14 @@ void buzzerEnable(int bEnable) //buzzer 사용
 	else 				write(fd, &"0", 1);
 	close(fd);
 }
-void setFrequency(int scale) // buzzer on
+void setFrequency(int scale) 
+// buzzer on
 {
 	char path[200];
 	sprintf(path,"%s%s",gBuzzerBaseSysDir,BUZZER_FREQUENCY_NAME);
 	int fd=open(path,O_WRONLY);
-	if ( fd < 0 ) // 파일 open error
+	if ( fd < 0 ) 
+	// 파일 open error
 	{
 		perror("driver open error.\n");
 		return 0;
