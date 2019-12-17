@@ -223,8 +223,6 @@ void fnd(void* Arg4)
 }
 
 
-
-
 int main(void)
 {
 	lcdtextInit();
@@ -233,7 +231,7 @@ int main(void)
 	if(err!=0)
 		printf("touch create failed\n");
 		
-		
+			fndDisp(60,0);
 	lcdWrite("start.bmp");
 	lcdwrite("   START!   ");
 	while(!touch)
