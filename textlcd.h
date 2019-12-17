@@ -1,3 +1,3 @@
-void init(void);
-void lcdwrite(const char *str1, const char *str2, int lineFlag);
-void lcdexit(void);
+int lcdtextInit(void);
+int lcdwrite(const char *str1);
+int lcdexit(void);
