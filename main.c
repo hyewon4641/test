@@ -37,9 +37,11 @@
  "    B  B  B       B  B  B      B  ^D  G    A-B-B    "
  "         ^C  ^C  ^C     ^C-^C  B  B  "
  "    B  ^D  ^D  ^C  A  G-G   "
+ "    B  B  A  A--B  A      ^D-^D    "
  "    B  B  B       B  B  B      B  ^D  G    A-B-B    "
  "         ^C  ^C  ^C     ^C-^C  B  B  "
  "    B  ^D  ^D  ^C  A  G-G   ";
+ 
  
 
 int realx;
@@ -55,12 +57,11 @@ pthread_t bgm_id;
 pthread_t fnd_id;
 pthread_t colorled_id;	
 
-
 void collect(void* Arg1)
 {
 	int x;
 	int y;
-	int cnt;
+	int cnt = 0;
 	touchLibInit();
 	COMMON_MSG_T msgRx;
 	int msgID=msgget(MESSAGE_ID,IPC_CREAT|0666);
@@ -70,17 +71,17 @@ void collect(void* Arg1)
 		printf("Cannot get msgID\n");
 		return -1;
 	}
-	
+
 		while(!thread_exit)
 		{   
+		
 			int reValue=0;
-			reValue=msgrcv(msgID,&msgRx,sizeof(COMMON_MSG_T) -  sizeof(long int),0,0);
-			//printf ("msgRx whosend: %d %d \r\n", msgRx, whosend, cnt, reValue);
-			
+			reValue=msgrcv(msgID,&msgRx,sizeof (COMMON_MSG_T) - sizeof(long int),0,0);
+			//printf ("msgRx whosend:%d %d %d\r\n",msgRx.whosend, cnt, reValue);
 			switch(msgRx.whosend)
 			{
 				case 2: x=msgRx.realdata; cnt=3; break;
-				case 3: y=msgRx.realdata; cnt=3;break;
+				case 3: y=msgRx.realdata; cnt=3 ;break;
 				case 4: 
 					if(cnt==0)
 					{;} //do nothing
@@ -88,18 +89,19 @@ void collect(void* Arg1)
 					{	
 						realx=x; realy=y;
 						printf("x=%d,y=%d\n",realx,realy);
-						touch = 1;
+						touch=1;
 						cnt--;
-						
+
 					}
 					else
 					{cnt--;}
 				
 					break;
 			}	
-		}
+	}	//End of While
 	touchLibExit();
-}
+	
+}	//End of Func.
 
 void bgm(void* Arg2)
 {
@@ -110,12 +112,12 @@ void bgm(void* Arg2)
 	char *note = musicnote8;
 	
 	char prevChar = 0;
-
+	
 		for (i=0;i<strlen(note);i++)
 		{
-			if(thred_exit==1)
+			if(thread_exit==1)	
 			{
-				buzzerEnable(0);
+				buzzerEnable (0);
 				break;
 			}
 			switch (note[i])
@@ -161,12 +163,12 @@ void bgm(void* Arg2)
 				case 'b': thisScale--;	break;
 			}
 			prevChar = note[i];
-		} //End of For.
+		}	//ENd of For.
 		
 		usleep(2000*1000);
 		printf("end\n");
-	buzzerEnable(0);
-} //End of Func.
+	 buzzerEnable (0);
+}	//End of Func.
 
 
 void colorled_OnOff(void* Arg3)
@@ -176,16 +178,16 @@ void colorled_OnOff(void* Arg3)
 	{
 		colorled_on();
 		usleep(500*1000);
-	
+		
 		colorled_off();
 		usleep(500*1000);
-	
+		
 		if(i==0)
 		break;
-	
+		
 	}
 	colorled_off();
-	
+
 	pwmInactiveAll();
 	
 	//pthread_exit();
@@ -193,25 +195,26 @@ void colorled_OnOff(void* Arg3)
 
 void fnd(void* Arg4)
 {
-	
-	for(i=60;i>=0;i--)
-	{
-		if(thread_exit==1) break;
-		fndDisp(i,0);
-		
-		
-		if(i==10)
+
+		for(i=60;i>=0;i--)
 		{
-			int err=pthread_create(&colorled_id,NULL,&colorled_OnOff,NULL);	
-			if(err==0)
-			printf("ss\n");		
-		}
-			sleep(1);
-	 } 	
+				if(thread_exit==1) break;
+			fndDisp(i,0);
+			
+			
+			if(i==10)
+			{
+				int err=pthread_create(&colorled_id,NULL,&colorled_OnOff,NULL);	
+				if(err==0)
+				printf("ss\n");		
+			}
+				sleep(1);
+			 } 	
+			 
+			 thread_exit=1;
+			 lcdWrite("loser.bmp");
+			 lcdwrite("RETRY!");
 		 
-		 thread_exit = 1;
-		 lcdWrite("loser.bmp");
-		 lcdWrite("RETRY!");
 }
 
 
@@ -229,8 +232,8 @@ int main(void)
 	if(err2!=0)
 		printf("fnd creat failed\n");
 	
-	lcdtextInit();	
-	ledLibInit();
+	lcdtextInit();
+	ledLibInit();	
 	ledOnOff(0,1);
 	ledOnOff(1,1);
 	ledOnOff(2,1);
@@ -238,36 +241,37 @@ int main(void)
 	ledOnOff(4,1);
 	int ledcnt=5;
 	lcdwrite("START!");
-	
-	//Game Tree
-	lcdWrite("tree.bmp");
-	
-	while(ledcnt)
-	{
-		if(touch==1)
+
+		//Game Tree
+		lcdWrite("tree.bmp");
+		
+		while(ledcnt)
 		{
-			if(((830<realx)&&(realx<860))&&((320<realy)&&(realy<360)))
+			
+			if(touch==1)
 			{
-				lcdWrite("tree_great.bmp");
-				lcdwrite("GREAT");
-				sleep(1);
-				lcdWrite("santa.bmp");
-				touch=0;
-				break;
+				if(((830<realx)&&(realx<860))&&((320<realy)&&(realy<360)))
+				{
+					lcdWrite("tree_great.bmp");
+					lcdwrite("GREAT");
+					sleep(1);
+					lcdWrite("santa.bmp");
+					touch=0;
+					break;
+				}
+				else 
+				{
+					lcdWrite("tree_retry.bmp");
+					lcdwrite("RETRY");
+					ledcnt--;
+					ledOnOff(ledcnt,0);
+					sleep(1);
+					touch=0;
+					lcdWrite("tree.bmp");
+				}
 			}
-			else 
-			{
-				lcdWrite("tree_retry.bmp");
-				lcdwrite("RETRY");
-				ledcnt--;
-				ledOnOff(ledcnt,0);
-				sleep(1);
-				touch=0;
-				lcdWrite("tree.bmp");
-			}
-		}
-	}//End of Game 1 write
-	
+		} //End of Game 1 while
+		
 		if (ledcnt) lcdWrite("santa.bmp");
 		while(ledcnt)
 		{
@@ -287,14 +291,13 @@ int main(void)
 					lcdWrite("santa_retry.bmp");
 					lcdwrite("RETRY");
 					ledcnt--;
-					ledOnoff(ledcnt,0);
+					ledOnOff(ledcnt,0);
 					sleep(1);
-					touch = 0;
+					touch=0;
 					lcdWrite("santa.bmp");
-				}		
-			}
+				}
+			}		
 		} //End of Game 2 while
-		
 		if (ledcnt) lcdWrite("frozen.bmp");
 		while(ledcnt)
 		{
@@ -302,26 +305,27 @@ int main(void)
 			{
 				if(((920<realx)&&(realx<960))&&((95<realy)&&(realy<130)))
 				{
-					lcdWrite("frozen.bmp");
-					lcdwrite("GREAT");
+					lcdWrite("frozen_great.bmp");
+					lcdwrite("GREAT!");
 					sleep(1);
 					break;
 				}
 				else 
 				{
 					lcdWrite("frozen_retry.bmp");
-					lcdwrite("RETRY");
+					lcdwrite("RETRY!");
 					ledcnt--;
 					ledOnOff(ledcnt,0);
 					sleep(1);
 					lcdWrite("frozen.bmp");
-				}		
+					}
 			}
-		} //End of Game 3 while
+		}	//End of Game 3 while
 		
-		thread_exit = 1;
+	
+		thread_exit=1;
 		if (ledcnt)
-		{
+		{ 
 			lcdwrite("CONGRATULATION");
 			lcdWrite("winner.bmp");
 		}
@@ -332,13 +336,15 @@ int main(void)
 			lcdwrite("RETRY!");
 		}
 		
+	
+
 		pthread_cancel(&collect_id);
 		pthread_cancel(&bgm_id);
 		pthread_cancel(&fnd_id);
 		pthread_cancel(&colorled_id);
 		ledLibExit();
 		lcdexit();
-		
+	
 		return 0;
 }
 
