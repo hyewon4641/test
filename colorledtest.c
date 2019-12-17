@@ -177,12 +177,27 @@ int pwmStartAll(void)
 {
 int fd = 0;
 	fd = open ( COLOR_LED_DEV_R_ PWM_ENABLE, O_WRONLY);
+	if ( fd < 0 ) // 파일 open error
+	{
+		perror("driver open error.\n");
+		return 0;
+	}	
 	write(fd,&"1",1);
 	close(fd);
 	fd = open ( COLOR_LED_DEV_G_ PWM_ENABLE, O_WRONLY);
+	if ( fd < 0 ) // 파일 open error
+	{
+		perror("driver open error.\n");
+		return 0;
+	}	
 	write(fd,&"1",1);
 	close(fd);
 	fd = open ( COLOR_LED_DEV_B_ PWM_ENABLE, O_WRONLY);
+	if ( fd < 0 ) // 파일 open error
+	{
+		perror("driver open error.\n");
+		return 0;
+	}	
 	write(fd,&"1",1);
 	close(fd);
 	return 1;
