@@ -63,15 +63,15 @@ void touchThFunc(void* Arg)
             {
 				/* TODO: convert value to pixels */
 				printf("%s = %d\n", stEvent.code == EVENT_CODE_X ? "X" : "Y", stEvent.value);		
-			if(stEvent.code==EVENT_CODE_X)
-			msgTx.whosend=2; //X 2, Y 3
-			else if(stEvent.code==EVENT_CODE_Y)
-			msgTx.whosend=3;
+				if(stEvent.code==EVENT_CODE_X)
+					msgTx.whosend=2; //X 2, Y 3
+				else if(stEvent.code==EVENT_CODE_Y)
+					msgTx.whosend=3;
 		
 			msgTx.realdata=stEvent.value;
-			int returnValue=msgsnd(msgID,&msgTx,sizeof(int),0);
-			if(returnValue>0)
-		printf("msgsnd success\n");
+			int returnValue=msgsnd(msgID,&msgTx,sizeof(COMMON_MSG_T) - sizeof(long int), 0);
+			if(returnValue==0)
+				printf("msgsnd success\n");
 		}
 	}
 }
@@ -80,14 +80,14 @@ void clockThFunc(void* Arg)
 {
 	COMMON_MSG_T msgclockTx;
 	msgclockTx.messageNum=1;
-	msgclockTx.whosend=0;
+	msgclockTx.whosend=4;
 	
 	while(1)
 	{
 		msgclockTx.realdata = 999;
-		msgsnd(msgID,&msgclockTx,sizeof(int),0);
+		msgsnd(msgID,&msgclockTx,sizeof(COMMON_MSG_T) - sizeof(long int),0);
 		//sleep(0.1);
-		usleep(1000*1000);//100ms
+		usleep(100*1000);//100ms
 	}
 }
 	

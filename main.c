@@ -36,14 +36,18 @@
  "    B  B  A  A--B  A      ^D-^D    "
  "    B  B  B       B  B  B      B  ^D  G    A-B-B    "
  "         ^C  ^C  ^C     ^C-^C  B  B  "
+ "    B  ^D  ^D  ^C  A  G-G   "
+ "    B  B  B       B  B  B      B  ^D  G    A-B-B    "
+ "         ^C  ^C  ^C     ^C-^C  B  B  "
  "    B  ^D  ^D  ^C  A  G-G   ";
  
 
 int realx;
 int realy;
-int ledcnt=5;
+
 int thread_exit=0;
 int i;
+int touch;
 
 
 pthread_t collect_id;
@@ -66,12 +70,12 @@ void collect(void* Arg1)
 		printf("Cannot get msgID\n");
 		return -1;
 	}
-	if(thread_exit==0)
-	{
-		while(1)
+	
+		while(!thread_exit)
 		{   
 			int reValue=0;
-			reValue=msgrcv(msgID,&msgRx,sizeof(int),0,0);
+			reValue=msgrcv(msgID,&msgRx,sizeof(COMMON_MSG_T) -  sizeof(long int),0,0);
+			//printf ("msgRx whosend: %d %d \r\n", msgRx, whosend, cnt, reValue);
 			
 			switch(msgRx.whosend)
 			{
@@ -84,6 +88,8 @@ void collect(void* Arg1)
 					{	
 						realx=x; realy=y;
 						printf("x=%d,y=%d\n",realx,realy);
+						touch = 1;
+						cnt--;
 						
 					}
 					else
@@ -107,6 +113,11 @@ void bgm(void* Arg2)
 
 		for (i=0;i<strlen(note);i++)
 		{
+			if(thred_exit==1)
+			{
+				buzzerEnable(0);
+				break;
+			}
 			switch (note[i])
 			{
 				case ' ': case '-':	//Play scale and wait;
@@ -150,28 +161,31 @@ void bgm(void* Arg2)
 				case 'b': thisScale--;	break;
 			}
 			prevChar = note[i];
-		}
+		} //End of For.
+		
 		usleep(2000*1000);
 		printf("end\n");
-	
-}
+	buzzerEnable(0);
+} //End of Func.
 
 
 void colorled_OnOff(void* Arg3)
 {
 	pwmLedInit();
-	while(1)
+	while(!thread_exit)
 	{
-	colorled_on();
-	usleep(500*1000);
+		colorled_on();
+		usleep(500*1000);
 	
+		colorled_off();
+		usleep(500*1000);
+	
+		if(i==0)
+		break;
+	
+	}
 	colorled_off();
-	usleep(500*1000);
 	
-	if(i==0)
-	break;
-	
-}
 	pwmInactiveAll();
 	
 	//pthread_exit();
@@ -182,6 +196,7 @@ void fnd(void* Arg4)
 	
 	for(i=60;i>=0;i--)
 	{
+		if(thread_exit==1) break;
 		fndDisp(i,0);
 		
 		
@@ -192,7 +207,11 @@ void fnd(void* Arg4)
 			printf("ss\n");		
 		}
 			sleep(1);
-		 } 	
+	 } 	
+		 
+		 thread_exit = 1;
+		 lcdWrite("loser.bmp");
+		 lcdWrite("RETRY!");
 }
 
 
@@ -211,74 +230,118 @@ int main(void)
 		printf("fnd creat failed\n");
 	
 	lcdtextInit();	
+	ledLibInit();
+	ledOnOff(0,1);
+	ledOnOff(1,1);
+	ledOnOff(2,1);
+	ledOnOff(3,1);
+	ledOnOff(4,1);
+	int ledcnt=5;
+	lcdwrite("START!");
+	
+	//Game Tree
 	lcdWrite("tree.bmp");
 	
-	if(ledcnt>0)
+	while(ledcnt)
 	{
-		while(1)
+		if(touch==1)
 		{
-			if(((825<realx)&&(realx<840))&&((335<realy)&&(realy<350)))
+			if(((830<realx)&&(realx<860))&&((320<realy)&&(realy<360)))
 			{
 				lcdWrite("tree_great.bmp");
 				lcdwrite("GREAT");
 				sleep(1);
 				lcdWrite("santa.bmp");
+				touch=0;
 				break;
 			}
 			else 
 			{
 				lcdWrite("tree_retry.bmp");
 				lcdwrite("RETRY");
+				ledcnt--;
+				ledOnOff(ledcnt,0);
 				sleep(1);
+				touch=0;
 				lcdWrite("tree.bmp");
 			}
 		}
-		
-		while(1)
-		{
-			if(((685<realx)&&(realx<700))&&((105<realy)&&(realy<120)))
-			{
-				lcdWrite("santa_great.bmp");
-				lcdwrite("GREAT");
-				sleep(1);
-				lcdWrite("frozen.bmp");
-				break;
-			}
-			else 
-			{
-				lcdWrite("santa_retry.bmp");
-				lcdwrite("RETRY");
-				sleep(1);
-				lcdWrite("santa.bmp");
-			}		
-		}
+	}//End of Game 1 write
 	
-			while(1)
+		if (ledcnt) lcdWrite("santa.bmp");
+		while(ledcnt)
 		{
-			if(((935<realx)&&(realx<950))&&((105<realy)&&(realy<120)))
+			if(touch==1)
 			{
-				lcdWrite("frozen.bmp");
-				lcdwrite("GREAT");
-				sleep(1);
-				lcdWrite("winner.bmp");
-				break;
+				if(((670<realx)&&(realx<715))&&((380<realy)&&(realy<410)))
+				{
+					lcdWrite("santa_great.bmp");
+					lcdwrite("GREAT");
+					sleep(1);
+					lcdWrite("frozen.bmp");
+					touch=0;
+					break;
+				}
+				else 
+				{
+					lcdWrite("santa_retry.bmp");
+					lcdwrite("RETRY");
+					ledcnt--;
+					ledOnoff(ledcnt,0);
+					sleep(1);
+					touch = 0;
+					lcdWrite("santa.bmp");
+				}		
 			}
-			else 
+		} //End of Game 2 while
+		
+		if (ledcnt) lcdWrite("frozen.bmp");
+		while(ledcnt)
+		{
+			if(touch==1)
 			{
-				lcdWrite("frozen_retry.bmp");
-				lcdwrite("RETRY");
-				sleep(1);
-				lcdWrite("frozen.bmp");
-			}		
+				if(((920<realx)&&(realx<960))&&((95<realy)&&(realy<130)))
+				{
+					lcdWrite("frozen.bmp");
+					lcdwrite("GREAT");
+					sleep(1);
+					break;
+				}
+				else 
+				{
+					lcdWrite("frozen_retry.bmp");
+					lcdwrite("RETRY");
+					ledcnt--;
+					ledOnOff(ledcnt,0);
+					sleep(1);
+					lcdWrite("frozen.bmp");
+				}		
+			}
+		} //End of Game 3 while
+		
+		thread_exit = 1;
+		if (ledcnt)
+		{
+			lcdwrite("CONGRATULATION");
+			lcdWrite("winner.bmp");
 		}
 		
-	}
-		lcdWrite("loser.bmp");
-		thread_exit=1;
+		else
+		{
+			lcdWrite("loser.bmp");
+			lcdwrite("RETRY!");
+		}
+		
+		pthread_cancel(&collect_id);
+		pthread_cancel(&bgm_id);
+		pthread_cancel(&fnd_id);
+		pthread_cancel(&colorled_id);
+		ledLibExit();
 		lcdexit();
+		
 		return 0;
 }
-}
+
 	
 	
 	
