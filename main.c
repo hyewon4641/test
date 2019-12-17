@@ -52,10 +52,10 @@ int i;
 int touch;
 
 
-pthread_t collect_id;
-pthread_t bgm_id;
-pthread_t fnd_id;
-pthread_t colorled_id;	
+pthread_t collect_id; //touch thread id생성 
+pthread_t bgm_id;//bgm thread id생성 
+pthread_t fnd_id;//fnd thread id생성 
+pthread_t colorled_id;	//colorled thread id생성 
 
 void collect(void* Arg1)
 {
@@ -76,7 +76,7 @@ void collect(void* Arg1)
 		{   
 		
 			int reValue=0;
-			reValue=msgrcv(msgID,&msgRx,sizeof (COMMON_MSG_T) - sizeof(long int),0,0);
+			reValue=msgrcv(msgID,&msgRx,sizeof (COMMON_MSG_T) - sizeof(long int),0,0);//message receive
 			//printf ("msgRx whosend:%d %d %d\r\n",msgRx.whosend, cnt, reValue);
 			switch(msgRx.whosend)
 			{
@@ -109,7 +109,7 @@ void bgm(void* Arg2)
 	int i=0;
 	int j=0;
 	int thisScale = 0;
-	char *note = musicnote8;
+	char *note = musicnote8;//musinote 8 재생 
 	
 	char prevChar = 0;
 	
@@ -200,26 +200,24 @@ void fnd(void* Arg4)
 		for(i=60;i>=0;i--)
 		{
 				if(thread_exit==1) break;
-			fndDisp(i,0);
+				fndDisp(i,0);
 			
 			
 			if(i==10)
 			{
-				int err=pthread_create(&colorled_id,NULL,&colorled_OnOff,NULL);	
+				int err=pthread_create(&colorled_id,NULL,&colorled_OnOff,NULL); //colorled thread 생성.  	
 				if(err==0)
 				printf("ss\n");		
 			}
 				sleep(1);
 				
-				if(i==0)
+				if(i==0) //
 				{lcdWrite("loser.bmp");
 			lcdwrite("RETRY!");
 		 }
 			 } 	
 			 
-			 thread_exit=1;
-			 //
-		 
+			 thread_exit=1
 }
 
 
@@ -231,7 +229,7 @@ int main(void)
 	if(err!=0)
 		printf("touch create failed\n");
 		
-			fndDisp(60,0);
+	fndDisp(60,0);
 	lcdWrite("start.bmp");
 	lcdwrite("   START!   ");
 	while(!touch)
@@ -285,6 +283,7 @@ int main(void)
 			}
 		} //End of Game 1 while
 		
+		//Game Santa
 		if (ledcnt) lcdWrite("santa.bmp");
 		while(ledcnt)
 		{
@@ -311,6 +310,7 @@ int main(void)
 				}
 			}		
 		} //End of Game 2 while
+		//Game Frozen
 		if (ledcnt) lcdWrite("frozen.bmp");
 		while(ledcnt)
 		{
