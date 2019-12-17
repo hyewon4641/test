@@ -113,6 +113,7 @@ void bgm(void* Arg2)
 	
 	char prevChar = 0;
 	
+	
 		for (i=0;i<strlen(note);i++)
 		{
 			if(thread_exit==1)	
@@ -209,11 +210,15 @@ void fnd(void* Arg4)
 				printf("ss\n");		
 			}
 				sleep(1);
+				
+				if(i==0)
+				{lcdWrite("loser.bmp");
+			lcdwrite("RETRY!");
+		 }
 			 } 	
 			 
 			 thread_exit=1;
-			 lcdWrite("loser.bmp");
-			 lcdwrite("RETRY!");
+			 //
 		 
 }
 
@@ -222,9 +227,20 @@ void fnd(void* Arg4)
 
 int main(void)
 {
+	lcdtextInit();
+	ledLibInit();	
 	int err=pthread_create(&collect_id,NULL,&collect,NULL);
 	if(err!=0)
 		printf("touch create failed\n");
+		
+		
+	lcdWrite("start.bmp");
+	lcdwrite("   START!   ");
+	while(!touch)
+	{;}
+	touch=0;
+
+	
 	int err1=pthread_create(&bgm_id,NULL,&bgm,NULL);
 	if(err1!=0)
 		printf("bgm creat failed\n");
@@ -232,15 +248,14 @@ int main(void)
 	if(err2!=0)
 		printf("fnd creat failed\n");
 	
-	lcdtextInit();
-	ledLibInit();	
+	
 	ledOnOff(0,1);
 	ledOnOff(1,1);
 	ledOnOff(2,1);
 	ledOnOff(3,1);
 	ledOnOff(4,1);
 	int ledcnt=5;
-	lcdwrite("START!");
+	
 
 		//Game Tree
 		lcdWrite("tree.bmp");
@@ -253,7 +268,7 @@ int main(void)
 				if(((830<realx)&&(realx<860))&&((320<realy)&&(realy<360)))
 				{
 					lcdWrite("tree_great.bmp");
-					lcdwrite("GREAT");
+					lcdwrite("   GREAT!   ");
 					sleep(1);
 					lcdWrite("santa.bmp");
 					touch=0;
@@ -262,7 +277,7 @@ int main(void)
 				else 
 				{
 					lcdWrite("tree_retry.bmp");
-					lcdwrite("RETRY");
+					lcdwrite("   RETRY!   ");
 					ledcnt--;
 					ledOnOff(ledcnt,0);
 					sleep(1);
@@ -280,7 +295,7 @@ int main(void)
 				if(((670<realx)&&(realx<715))&&((380<realy)&&(realy<410)))
 				{
 					lcdWrite("santa_great.bmp");
-					lcdwrite("GREAT");
+					lcdwrite("   GREAT!   ");
 					sleep(1);
 					lcdWrite("frozen.bmp");
 					touch=0;
@@ -289,7 +304,7 @@ int main(void)
 				else 
 				{
 					lcdWrite("santa_retry.bmp");
-					lcdwrite("RETRY");
+					lcdwrite("   RETRY!   ");
 					ledcnt--;
 					ledOnOff(ledcnt,0);
 					sleep(1);
@@ -303,37 +318,47 @@ int main(void)
 		{
 			if(touch==1)
 			{
-				if(((920<realx)&&(realx<960))&&((95<realy)&&(realy<130)))
+				if(((900<realx)&&(realx<980))&&((85<realy)&&(realy<140)))
 				{
 					lcdWrite("frozen_great.bmp");
-					lcdwrite("GREAT!");
+					lcdwrite("CONGRATULATION");
 					sleep(1);
+				   lcdWrite("winner.bmp");
+					touch=0;
 					break;
+				
 				}
 				else 
 				{
 					lcdWrite("frozen_retry.bmp");
-					lcdwrite("RETRY!");
+					lcdwrite("   RETRY!   ");
 					ledcnt--;
 					ledOnOff(ledcnt,0);
 					sleep(1);
 					lcdWrite("frozen.bmp");
+					touch=0;
 					}
-			}
+		 	}
+				
 		}	//End of Game 3 while
 		
 	
 		thread_exit=1;
-		if (ledcnt)
-		{ 
+		if(ledcnt>0)
+	   {
+		  
+		   lcdWrite("winner.bmp");
 			lcdwrite("CONGRATULATION");
-			lcdWrite("winner.bmp");
+			sleep(100);
 		}
 		
 		else
 		{
+		
 			lcdWrite("loser.bmp");
 			lcdwrite("RETRY!");
+			sleep(100);
+	
 		}
 		
 	
