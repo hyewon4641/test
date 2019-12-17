@@ -140,20 +140,20 @@ int pwmLedInit(void)
 }
 
 
-int colorled_on(void)
+int colorled_on(void)  // Blue_led on
 {
 	
-	pwmSetPercent(atoi("100"),0);
-	pwmSetPercent(atoi("0"),1);
-	pwmSetPercent(atoi("0"),2);
+	pwmSetPercent(atoi("100"),0);  // blue = on
+	pwmSetPercent(atoi("0"),1);  // green = off
+	pwmSetPercent(atoi("0"),2);  // red = off
 
-}
-int colorled_off(void)
+} /
+int colorled_off(void) // led off
 {
 	
-	pwmSetPercent(atoi("0"),0);
-	pwmSetPercent(atoi("0"),1);
-	pwmSetPercent(atoi("0"),2);
+	pwmSetPercent(atoi("0"),0); // blue = off
+	pwmSetPercent(atoi("0"),1); // green = off
+	pwmSetPercent(atoi("0"),2); // red = off
 	
 }
 

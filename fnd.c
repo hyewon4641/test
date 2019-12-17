@@ -34,7 +34,7 @@ int fndDisp(int num , int dotflag) //0-999999 숫자, 비트로 인코딩된 dot
 	int fd;
 	int temp,i;
 	stFndWriteForm stWriteData;
-	for (i = 0; i < MAX_FND_NUM ; i++ )
+	for (i = 0; i < MAX_FND_NUM ; i++ )  
 	{
 		stWriteData.DataDot[i] = (dotflag & (0x1 << i)) ? 1 : 0;
 		stWriteData.DataValid[i] = 1;
@@ -44,8 +44,10 @@ int fndDisp(int num , int dotflag) //0-999999 숫자, 비트로 인코딩된 dot
 	temp = num % 100000; stWriteData.DataNumeric[1]= temp /10000;
 	temp = num % 10000; stWriteData.DataNumeric[2] = temp /1000;
 	temp = num %1000; stWriteData.DataNumeric[3] = temp /100;
-	temp = num %100; stWriteData.DataNumeric[4] = temp /10;
-	stWriteData.DataNumeric[5] = num %10;
+	temp = num %100; stWriteData.DataNumeric[4] = temp /10; 
+	stWriteData.DataNumeric[5] = num %10; 
+	// i에 여섯자리의 숫자를 입력하고 각 자리 수를 배열에 입
+	
 	fd = open(FND_DRIVER_NAME,O_RDWR);
 	if ( fd < 0 )
 	{
@@ -54,7 +56,7 @@ int fndDisp(int num , int dotflag) //0-999999 숫자, 비트로 인코딩된 dot
 	}
 	write(fd, &stWriteData, sizeof(stFndWriteForm));
 	close(fd);
-	return 1;
+	return 1;력
 }
 
 int fndOff()
@@ -62,7 +64,7 @@ int fndOff()
 	int fd,i;
 	stFndWriteForm stWriteData;
 	
-	for (i = 0; i < MAX_FND_NUM ; i++ )
+	for (i = 0; i < MAX_FND_NUM ; i++ )력
 	{
 		stWriteData.DataDot[i] =  0;  
 		stWriteData.DataNumeric[i] = 0;
