@@ -4,41 +4,73 @@
 #include <unistd.h>
 #include <pthread.h>
 #include "libbuzzer.h"
- char musicnote5[2000]=																	
- "^C    A-Bb   ^C     ^C-^C       "
- "    ^D-^E     ^F      ^F-^F      "
- "    A-Bb    ^C      ^C   "
- "   ^C     ^D-^C    Bb     Bb-Bb    "
- "    A      ^C      F      A      G      Bb-Bb       E      F    "
+
+char musicnote3[2000]=																	
+ "D    C     D     F   B    B     "
+ "    ^D-^E     ^C      ^E-^F      "
+ "    C-Bb    D      ^F   "
+ "   ^E     ^D-^E    D     Fb-Fb    "
+ "    A      ^E      D      B      D     Bb-Bb       E      F    "
  
- "    ^C    A-Bb   ^C     ^C-^C       "
- "    ^D-^E    ^F      ^F-^F      "
+ "    ^C    A-A   ^E     ^C-^C       "
+ "    ^D-^E    ^F      C-^C      "
+ "    A-Bb    D      ^C   "
+ "   ^C     ^C    Cb     Bb    "
+ "    A      ^E     E         D      Bb-Bb       E       F        "
+ "       ^F     ^G     ^E     ^E     F     ^D     ^D-^D        "
+ "    ^F     ^G     ^F     D     ^F     ^D-^D        "
+ "    ^G     ^A     DF     ^F     ^G     ^E     ^E     ^E    "
+ "   ^E    ^A     ^F     ^E     ^D     C    ";
+char musicnote4[2000]=																	
+ "D    C#     E     F   Bb    B     "
+ "    ^D-^D     C      ^F-^F      "
+ "    C-B    ^D      ^F   "
+ "       ^D-^E    Bb     Fb-Fb    "
+ "       ^E      C      B      G      Bb-Bb       E      F    "
+ "    ^C    A   ^E     ^C-^C       "
+ "    ^D-^E    ^F      ^C      "
+ "    A-Bb    ^C      DDD   "
+ "   ^C     A    Cb     B    "
+ "    F      ^E     E         G      Bb-Bb       E       F        "
+ "       ^C     ^G     ^E     ^E     ^F     ^D     ^D-^D        "
+ "    ^F     ^E     ^E     ^D#     ^C     ^D-^D        "
+ "    ^G     ^A     ^F     ^F     ^C     ^E     ^E     ^E    "
+ "   ^E    ^A     ^F     ^G     ^G     C    ";
+char musicnote5[2000]=																	
+ "D    C     E     F   B    B     "
+ "    ^D-^E     ^C      ^E-^F      "
+ "    C-Bb    ^Cb      ^F   "
+ "   ^E     ^D-^E    Bb     Fb-Fb    "
+ "    A      ^E      C      B      G      Bb-Bb       E      F    "
+ 
+ "    ^E    Ab-Ab   ^F     ^G-^G       "
+ "    ^E-^C    ^C      ^F-^F      "
  "    A-Bb    ^C      ^C   "
- "   ^C     ^D-^C    Bb     Bb-Bb    "
- "    A      ^C      F      A      G      Bb-Bb       E       F        "
- "       ^F     ^G     ^F     ^E     ^F     ^D     ^D-^D        "
- "    ^F     ^G     ^F     ^E     ^F     ^D-^D        "
- "    ^G     ^A     ^G     ^F#     ^G     ^E     ^E     ^E    "
- "   ^E-^F    ^G     ^F     ^E     ^D     ^C-^C    ";
+ "   ^C     ^C    Cb     Bb    "
+ "    A      ^E     E         G      Bb-Bb       E       F        "
+ "       ^F     ^G     ^E     ^E     ^F     ^D     ^D-^D        "
+ "    ^F     ^G     ^F     ^E#     ^F     ^D-^D        "
+ "    ^G     ^A     ^F     ^F     ^G     ^E     ^E     ^E    "
+ "   ^E    ^A     ^F     ^E     ^D     C    ";
 char musicnote6[2000]=															//
-"G   B   ^D   ^F#  ^G   ^F#   ^E-^D   "
-"   ^A   ^G   ^G   ^F#-^G   ^F#   ^E-^D  "
-"   ^C   ^E   ^G   ^A-^Bb   ^A   ^G-^E  "
+"G   B     ^F#  ^G   ^F#   ^E-^D   "
+"   ^A    ^G   ^F#-^G   ^F#   ^E-^D  "
+"   ^E     ^G   ^A-^Bb   ^A   ^G-^E  "
 "   ^C   ^D#   ^G   ^A-^Bb   ^A   ^F-^D#  "
-"   ^G   ^A   ^F#   ^G  ^E   ^F#   ^E-^D#  "
-"   ^B   ^A   ^G   ^F#  ^E   ^F#   ^E-^D#  "
-"   ^D   ^E   ^G  ^D  ^C    "
+"   ^G  B   ^C#   ^G  ^E   ^C    "
+"   ^B   ^A   ^G   ^F#  ^E   ^E-^D#  "
+"   ^D   ^E   ^G  ^D  ^C   C   D"
 "   ^B   ^A   ^G   ^E   ^D#   ^A     ^B   ^A-^G  ";
  
  char musicnote7[2000]=															
-"G   B   ^D   ^F#  ^G   ^F#   ^E-^D   "
-"   ^A   ^G   ^G   ^F#-^G   ^F#   ^E-^D  "
-"   ^C   ^E   ^G   ^A-^Bb   ^A   ^G-^E  "
-"   ^C   ^D#   ^G   ^A-^Bb   ^A   ^F-^D#  "
-"   ^G   ^A   ^F#   ^G  ^E   ^F#   ^E-^D#  "
-"   ^B   ^A   ^G   ^F#  ^E   ^F#   ^E-^D#  "
-"   ^D   ^E   ^G  ^D  ^C    "
-"   ^B   ^A   ^G   ^E   ^D#   ^A     ^B   ^A-^G  ";
+"    B   ^D   ^F#  ^G   ^F#   ^E-^D   "
+"    ^C   E    ^G   ^F#   ^E-^D  "
+"   ^C   ^E   ^C   ^Bb   ^C   ^E-^E  "
+"   ^C   ^D#   ^G   ^A-^Bb   ^A   ^D-^D#  "
+"   ^G   ^A    ^C   ^F#   ^E-^E#  "
+"   ^E   B   ^G   ^F#  ^E   ^F#   ^E-^D#  "
+"   ^C   ^E   ^G  ^D  ^C    "
+"   ^B   ^A   ^A   ^B   ^A     ^B   ^A-^G  ";
  
  char musicnote8[2000]=																	//jingle bell
  "B  B  B       B  B  B      B  ^D  G    A-B-B    "
@@ -59,11 +91,11 @@ char musicnote6[2000]=															//
  "  B  ^D  ^D  ^C  A  G-G   ";
  
  char musicnote9[2000]=																	//santa claus is coming to town
- "^C    A-Bb   ^C     ^C-^C       "
- "    ^D-^E     ^F      ^F-^F      "
- "    A-Bb    ^C      ^C   "
- "   ^C     ^D-^C    Bb     Bb-Bb    "
- "    A      ^C      F      A      G      Bb-Bb       E      F    "
+ "^C    A-B   ^C     ^C-^C       "
+ "    ^D-^E     G      ^F-^F      "
+ "    A-Bb    C      ^C   "
+ "   ^C     ^D-D    Bb     Bb-Bb    "
+ "    A      ^C      G      A      G      Bb-Bb       E      F    "
  
  "    ^C    A-Bb   ^C     ^C-^C       "
  "    ^D-^E    ^F      ^F-^F      "
@@ -80,6 +112,7 @@ char musicnote6[2000]=															//
  "    A-Bb    ^C      ^C   "
  "   ^C     ^D-^C    Bb     Bb-Bb    "
  "    A      ^C      F      A      G      Bb-Bb       E      F    "
+ 
  
 
 int main(void)
