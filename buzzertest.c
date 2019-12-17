@@ -4,8 +4,33 @@
 #include <unistd.h>
 #include <pthread.h>
 #include "libbuzzer.h"
-
- char musicnote7[2000]=															//
+ char musicnote5[2000]=																	
+ "^C    A-Bb   ^C     ^C-^C       "
+ "    ^D-^E     ^F      ^F-^F      "
+ "    A-Bb    ^C      ^C   "
+ "   ^C     ^D-^C    Bb     Bb-Bb    "
+ "    A      ^C      F      A      G      Bb-Bb       E      F    "
+ 
+ "    ^C    A-Bb   ^C     ^C-^C       "
+ "    ^D-^E    ^F      ^F-^F      "
+ "    A-Bb    ^C      ^C   "
+ "   ^C     ^D-^C    Bb     Bb-Bb    "
+ "    A      ^C      F      A      G      Bb-Bb       E       F        "
+ "       ^F     ^G     ^F     ^E     ^F     ^D     ^D-^D        "
+ "    ^F     ^G     ^F     ^E     ^F     ^D-^D        "
+ "    ^G     ^A     ^G     ^F#     ^G     ^E     ^E     ^E    "
+ "   ^E-^F    ^G     ^F     ^E     ^D     ^C-^C    ";
+char musicnote6[2000]=															//
+"G   B   ^D   ^F#  ^G   ^F#   ^E-^D   "
+"   ^A   ^G   ^G   ^F#-^G   ^F#   ^E-^D  "
+"   ^C   ^E   ^G   ^A-^Bb   ^A   ^G-^E  "
+"   ^C   ^D#   ^G   ^A-^Bb   ^A   ^F-^D#  "
+"   ^G   ^A   ^F#   ^G  ^E   ^F#   ^E-^D#  "
+"   ^B   ^A   ^G   ^F#  ^E   ^F#   ^E-^D#  "
+"   ^D   ^E   ^G  ^D  ^C    "
+"   ^B   ^A   ^G   ^E   ^D#   ^A     ^B   ^A-^G  ";
+ 
+ char musicnote7[2000]=															
 "G   B   ^D   ^F#  ^G   ^F#   ^E-^D   "
 "   ^A   ^G   ^G   ^F#-^G   ^F#   ^E-^D  "
 "   ^C   ^E   ^G   ^A-^Bb   ^A   ^G-^E  "
