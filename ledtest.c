@@ -16,26 +16,26 @@ int main(void)
 	
 	 ledLibInit();
 	 
-	 ledOnOff(0,1);
-	 ledOnOff(1,1);
-	  ledOnOff(2,1);
-	  ledOnOff(3,1);
-	   ledOnOff(4,1);
-	  ledOnOff(5,1);
-	    sleep(1);
+	// ledOnOff(0,1);
+	 //ledOnOff(1,1);
+	  //ledOnOff(2,1);
+	  //ledOnOff(3,1);
+	   //ledOnOff(4,1);
+	  //ledOnOff(5,1);
+	   // sleep(1);
 	
-	  ledOnOff(5,0);
-	  sleep(1);
-	 ledOnOff(4,0);
-	 sleep(1);	 
-	 ledOnOff(3,0);
-	 sleep(1);
-	  ledOnOff(2,0);
-	  sleep(1);
-	   ledOnOff(1,0);
+	 // ledOnOff(5,0);
+	  //sleep(1);
+	 //ledOnOff(4,0);
+	 //sleep(1);	 
+	 //ledOnOff(3,0);
+	 //sleep(1);
+	  //ledOnOff(2,0);
+	  //sleep(1);
+	   //ledOnOff(1,0);
 	   
-	    sleep(1);
-	  ledOnOff(0,0);
+	  //  sleep(1);
+	  //ledOnOff(0,0);
 	  
 	 ledLibExit();
 
