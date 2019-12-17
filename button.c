@@ -59,6 +59,7 @@ void buttonThFunc(void* Arg)
 	{
 		printf("2");
 		ssize_t nread=read(fd,&stEvent,sizeof(stEvent));
+		// 버튼을 read
 		if(nread==-1)
 		{
 			printf("read failed\n");

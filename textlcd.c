@@ -64,6 +64,12 @@ int lcdtextInit(void)
 {
 	stTextLCD  stlcd; 
 	fd = open(TEXTLCD_DRIVER_NAME,O_RDWR);
+	if ( fd < 0 )
+	 // 파일 open error
+	{
+		perror("driver open error.\n");
+		return 0;
+	}	
 	memset(&stlcd,0,sizeof(stTextLCD));
 
 }
@@ -87,13 +93,20 @@ int lcdwrite(const char *str1)
 		memcpy(stlcd.TextData[stlcd.cmdData - 1],str1,len);
 	}
 	stlcd.cmd = CMD_WRITE_STRING;
-	// open  driver 
+	// open driver 
 	fd = open(TEXTLCD_DRIVER_NAME,O_RDWR);
+	if ( fd < 0 )
+	 // 파일 open error
+	{
+		perror("driver open error.\n");
+		return 0;
+	}	
 	
 	write(fd,&stlcd,sizeof(stTextLCD));
 }
 
 int lcdexit(void)
+//lcd종료 
 {
 	
 	lcdwrite(" ");

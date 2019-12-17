@@ -13,17 +13,20 @@
 static unsigned int ledValue=0;
 
 static int fd=0;
-int ledOnOff(int ledNum,int ledOnOff) // led 사용 
+int ledOnOff(int ledNum,int ledOnOff) 
+// led 사용 
 {
 	unsigned int i=1;
 	
 				//0x1;, ledOnOff ==2
-	i=i<<ledNum;		//0x1<<2; i=0x4;
+	i=i<<ledNum;		
+	//0x1<<2; i=0x4;
 	printf ("i:0x%08x, ledNum:%d\r\n",i, ledNum);
 	ledValue=ledValue&(~i);
 	printf ("ledValue:0x%08x\r\n",ledValue);
 	//~i = 0xfffffffC
 	if(ledOnOff!=0)
+	//ledOnOff 실패시 
 	{
 		printf ("ledValue or-ring. 0x%08x\r\n",i);
 		ledValue |=i;
@@ -35,6 +38,13 @@ int ledOnOff(int ledNum,int ledOnOff) // led 사용
 int ledLibInit(void)
 {
 	fd=open("/dev/periled",O_WRONLY);
+	if ( fd < 0 )
+	 // 파일 open error
+	{
+		perror("driver open error.\n");
+		return 0;
+	}	
+	
 	ledValue=0;
 }
 
